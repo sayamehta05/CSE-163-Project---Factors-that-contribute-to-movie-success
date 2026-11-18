@@ -1,4 +1,6 @@
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 def main():
     df = pd.read_csv("movies_metadata.csv")
@@ -26,10 +28,30 @@ def main():
     cleaner_runtime = df[df["runtime"] > 0]
     print(len(cleaner_runtime))
     print(cleaner_runtime["runtime"].describe())
-    
+
     longest_movies = cleaner_runtime["runtime"].max()
     print(longest_movies)
 
+    #creating graphs to visualize the data
+    #1. 
+    runtime_revenue = cleaner_runtime[cleaner_runtime["revenue"] > 0]
+    print(len(runtime_revenue))
+
+    #converting budget to numeric values
+    usable_data["budget"] = usable_data["budget"].apply(float)
+    print(usable_data[["budget", "revenue"]].describe())
+
+    sns.relplot(
+        data=usable_data,
+        x="budget",
+        y="revenue",
+        kind="scatter",
+    )
+
+    plt.title("Budget vs Revenue")
+    plt.xlabel("Budget ($)")
+    plt.ylabel("Revenue ($)")
+    plt.savefig("budget_vs_revenue.png", bbox_inches="tight")
 
 if __name__ == "__main__":
     main()
