@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 
 def get_month(date):
     """
-    getting the month from the release date
+    Takes a release data string in YYYY-MM-DD format and returns the two
+    digit month as a string.
     """
     return date[5:7]
 
@@ -16,16 +17,19 @@ def main():
     print(len(df))
 
     """
-    filtering through the dataframe to get only the budget and revenue
-    columns and dropping the rows with missing values
+    Selects the budget, revenue, and release_dat columns from the full
+    movie dataset, then drops any row missing a value in on of those
+    columns. Prints how many movies remain after removing missing data.
     """
     financial_df = df[["budget", "revenue", "release_date"]]
     cleaner_financial_df = financial_df.dropna()
     print(len(cleaner_financial_df))
 
     """
-    filtering the cleaner_financial_df even more to get only the rows
-    with budget and revenue not equal to zero
+    Counts how many movies have a budget of zero and how many have a
+    revenue of zero. A value of zero probably means the number wasn't 
+    recorded, so those rows aren't reliable for analysis. Budget is
+    compared to the string "0" because that is stored as a string.
     """
     movie_with_zero_budget = cleaner_financial_df[
         cleaner_financial_df["budget"] == "0"
@@ -37,8 +41,9 @@ def main():
     print(len(movie_with_zero_revenue))
 
     """
-    Finding usable data by excluding the rows with budget and
-    revenue equal to zero
+    Keeps movies where both budget and revenue are nonzero, 
+    giving a dataset of movies with real financial information.
+    Prints how many usable movies are left.
     """
     usable_data = cleaner_financial_df[
         (cleaner_financial_df["budget"] != "0")
@@ -47,8 +52,9 @@ def main():
     print(len(usable_data))
 
     """
-    filtering through the dataframe to get only the runtime column and
-    dropping the rows with missing values
+    Counts the movies with a runtime of 0 minutes, then keeps only
+    movies with a runtime greater than 0. Prints summary statistics
+    for runtime.
     """
     zero_runtime = df[df["runtime"] == 0]
     print(len(zero_runtime))
@@ -60,19 +66,22 @@ def main():
     print(longest_movies)
 
     """
-    creating graphs to visualize the data
+    Parsing through data to compare valid runtimes agains valid
+    revenues. Prints how many movies are both valid.
     """
     runtime_revenue = cleaner_runtime[cleaner_runtime["revenue"] > 0]
     print(len(runtime_revenue))
 
     """
-    converting budget to numeric values
+    Converts the budget column from text to floats so it can 
+    be plotted and compared. Prints summary stats for budget
+    and revenue.
     """
     usable_data["budget"] = usable_data["budget"].apply(float)
     print(usable_data[["budget", "revenue"]].describe())
 
     """
-    scatter plot of budget vs revenue
+    Scatter plot of budget vs revenue.
     """
     sns.relplot(
         data=usable_data,
@@ -87,7 +96,9 @@ def main():
     plt.savefig("budget_vs_revenue.png", bbox_inches="tight")
 
     """
-    group release date times by months
+    Selects the release date and revenue columns, drops rows with missing
+    values. Adds a month column using get_month, then groups the movies 
+    by month and prints the avg revenue for each month.
     """
     release_data = df[["release_date", "revenue"]]
     release_data = release_data.dropna()
@@ -100,7 +111,7 @@ def main():
     print(monthly_revenue)
 
     """
-    Release time vs revenue
+    Release time vs revenue bar chart.
     """
     sns.catplot(
         data=release_data,
