@@ -29,7 +29,7 @@ def main():
     print(len(df))
 
     """
-    Selects the budget, revenue, and release_dat columns from the full
+    Selects the budget and revenue columns from the full
     movie dataset, then drops any row missing a value in on of those
     columns. Prints how many movies remain after removing missing data.
     """
