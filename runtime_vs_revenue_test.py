@@ -1,0 +1,24 @@
+
+import pandas as pd
+import eda
+
+
+def test_runtime_revenue():
+    """Test runtime and revenue data."""
+    movies = eda.load_data()
+
+    assert len(movies) > 0
+    assert movies["runtime"].notna().all()
+    assert movies["revenue"].notna().all()
+    assert (movies["runtime"] > 0).all()
+    assert (movies["revenue"] > 0).all()
+
+
+def main():
+    """Run tests."""
+    test_runtime_revenue()
+    print("All tests passed!")
+
+
+if __name__ == "__main__":
+    main()
