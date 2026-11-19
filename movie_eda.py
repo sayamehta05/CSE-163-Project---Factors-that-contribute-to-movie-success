@@ -1,3 +1,11 @@
+"""
+CSE 163 Final Project
+Analyzing the Factors Behind Movie Success
+Authors: Saya Mehta and Camelee Yee
+
+Analyzes movie budget, revenue, reuntime, and
+release month using Pandas and Seaborn.
+"""
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -12,6 +20,10 @@ def get_month(date):
 
 
 def main():
+    """
+    Analyzes movie data, calculates statistics,
+    and creates visualizations.
+    """
     df = pd.read_csv("movies_metadata.csv")
     print(df.head())
     print(len(df))
@@ -21,34 +33,34 @@ def main():
     movie dataset, then drops any row missing a value in on of those
     columns. Prints how many movies remain after removing missing data.
     """
-    financial_df = df[["budget", "revenue", "release_date"]]
+    financial_df = df[["budget", "revenue"]]
     cleaner_financial_df = financial_df.dropna()
     print(len(cleaner_financial_df))
 
     """
     Counts how many movies have a budget of zero and how many have a
-    revenue of zero. A value of zero probably means the number wasn't 
+    revenue of zero. A value of zero probably means the number wasn't
     recorded, so those rows aren't reliable for analysis. Budget is
     compared to the string "0" because that is stored as a string.
     """
     movie_with_zero_budget = cleaner_financial_df[
         cleaner_financial_df["budget"] == "0"
-        ]
+    ]
     print(len(movie_with_zero_budget))
     movie_with_zero_revenue = cleaner_financial_df[
         cleaner_financial_df["revenue"] == 0
-        ]
+    ]
     print(len(movie_with_zero_revenue))
 
     """
-    Keeps movies where both budget and revenue are nonzero, 
+    Keeps movies where both budget and revenue are nonzero,
     giving a dataset of movies with real financial information.
     Prints how many usable movies are left.
     """
     usable_data = cleaner_financial_df[
         (cleaner_financial_df["budget"] != "0")
         & (cleaner_financial_df["revenue"] != 0)
-        ]
+    ]
     print(len(usable_data))
 
     """
@@ -73,7 +85,7 @@ def main():
     print(len(runtime_revenue))
 
     """
-    Converts the budget column from text to floats so it can 
+    Converts the budget column from text to floats so it can
     be plotted and compared. Prints summary stats for budget
     and revenue.
     """
@@ -81,7 +93,7 @@ def main():
     print(usable_data[["budget", "revenue"]].describe())
 
     """
-    Scatter plot of budget vs revenue.
+    Scatter plot of budget vs revenue
     """
     sns.relplot(
         data=usable_data,
@@ -97,7 +109,7 @@ def main():
 
     """
     Selects the release date and revenue columns, drops rows with missing
-    values. Adds a month column using get_month, then groups the movies 
+    values. Adds a month column using get_month, then groups the movies
     by month and prints the avg revenue for each month.
     """
     release_data = df[["release_date", "revenue"]]
